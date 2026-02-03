@@ -1,0 +1,51 @@
+#####
+## KeyBros
+## Sample configuration file for Linux or Microsoft Windows.
+## IMPORTANT:
+## - This file uses YAML. Structure and indentation are critical.
+## - To enable an optional setting, remove ONLY the single leading '#'.
+## - Lines starting with '##' are comments and should not be uncommented.
+## - Do not change spacing or indentation unless you know what you are doing.
+##
+## This template is provided as a starting point and must be adapted
+## to your environment (endpoints, tokens, sizing).
+#####
+
+sources:
+  source_tcp_1514:
+    type: syslog
+    mode: tcp
+    port: 1514
+    sink: sink-ngsiem
+
+    ## Optional: Maximum allowed event size in bytes
+    ## Default: 2048
+    ## Increase only if you expect large syslog messages
+    ## Warning: Large values increase memory usage and bandwidth
+    ## Maximum supported value: 950000
+    maxEventSize: 16384
+
+
+sinks:
+  sink-ngsiem:
+    type: hec
+    ## Authentication token for CrowdStrike NGSIEM
+    ## Replace with your tenant-specific token
+    token: <REPLACE_WITH_HEC_TOKEN>
+    ## CrowdStrike NGSIEM HEC endpoint
+    ## Example: https://ingest.<region>.crowdstrike.com
+    url: <REPLACE_WITH_HEC_ENDPOINT>
+    ## Optional: HTTP proxy for outbound traffic
+    ## Set to 'none' if no proxy is required
+    proxy: none
+    ## Number of concurrent worker threads
+    ## Increase cautiously for high-volume environments
+    workers: 4
+    ## Optional: Maximum batch size (in bytes) before sending
+    ## Typically managed automatically by FLC
+    ##
+    ## As of Aug 2025:
+    ## - Max compressed payload limit: 32 MB
+    ## - Recommended ceiling: 28 MB (leaves room for metadata)
+    ##
+    #maxBatchSize: 28000000
