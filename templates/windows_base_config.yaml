@@ -1,0 +1,40 @@
+#####
+## KeyBros
+## Sample configuration file for Microsoft Windows. This config file collect all event IDs.
+## IMPORTANT:
+## - This file uses YAML. Structure and indentation are critical.
+## - To enable an optional setting, remove ONLY the single leading '#'.
+## - Lines starting with '##' are comments and should not be uncommented.
+## - Do not change spacing or indentation unless you know what you are doing.
+##
+## This template is provided as a starting point and must be adapted
+## to your environment (endpoints, tokens, sizing).
+#####
+
+sources:
+  windows-eventlog-source:
+    type: wineventlog
+    sink: windows-eventlog-sink
+    channels:
+      - name: Application
+      - name: Security
+      - name: System
+      - name: ForwardedEvents
+    includeXML: false
+    language: 1033 #This setting forces the FLC agent to render the text as en-US. Other codes can be found in Microsoft documentation.
+    transforms:
+      - type: static_fields
+        fields:
+          - organization.name: #put the name of the organization here in the format: client-company-name (i.e company-name or john-doe-and-sons)
+
+sinks:
+  #destination sinks out of flc
+  windows-eventlog-sink:
+    type: hec
+    token: "REPLACE_WITH_SINK_API_TOKEN"
+    url: "REPLACE_WITH_SINK_ENDPOINT_URL"
+    workers: 4
+    compression: gzip
+    compressionLevel: 9
+    maxEventSize: 910000
+    maxBatchSize: 12000000
