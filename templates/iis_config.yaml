@@ -1,0 +1,40 @@
+#####
+## KeyBros
+## Sample configuration file for Microsoft IIS. This config file exclude historical IIS logs in the path.
+## IMPORTANT:
+## - This file uses YAML. Structure and indentation are critical.
+## - To enable an optional setting, remove ONLY the single leading '#'.
+## - Lines starting with '##' are comments and should not be uncommented.
+## - Do not change spacing or indentation unless you know what you are doing.
+##
+## This template is provided as a starting point and must be adapted
+## to your environment (endpoints, tokens, sizing).
+#####
+
+sources:
+  iis:
+    type: file
+    include:
+      - C:\inetpub\Logs\LogFiles\*\u_ex*.log
+    # Exlcuding 2010's and 2020-2025 logs as they are old and dont need to be ingested
+    exclude:
+      - C:\inetpub\Logs\LogFiles\*\u_ex1*.log
+      - C:\inetpub\Logs\LogFiles\*\u_ex20*.log
+      - C:\inetpub\Logs\LogFiles\*\u_ex21*.log
+      - C:\inetpub\Logs\LogFiles\*\u_ex22*.log
+      - C:\inetpub\Logs\LogFiles\*\u_ex23*.log
+      - C:\inetpub\Logs\LogFiles\*\u_ex24*.log
+      - C:\inetpub\Logs\LogFiles\*\u_ex25*.log
+    sink: iis-to-ngsiem
+    transforms:
+      - type: static_fields
+        fields:
+          orgnanization.name: #put the name of the organization here in the format: client-company-name (i.e company-name or john-doe-and-sons)
+sinks:
+  iis-to-ngsiem:
+    type: hec
+    token: "REPLACE_WITH_SINK_API_TOKEN"
+    url: "REPLACE_WITH_SINK_ENDPOINT_URL"
+    maxEventSize: 910000
+    maxBatchSize: 12000000
+    workers: 4
