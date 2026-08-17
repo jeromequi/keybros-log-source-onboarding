@@ -1,0 +1,44 @@
+#####
+## KeyBros
+## Sample configuration file for Microsoft Windows. This config file collect only event IDs that has a detection or are part of any existing rule templates.
+## IMPORTANT:
+## - This file uses YAML. Structure and indentation are critical.
+## - To enable an optional setting, remove ONLY the single leading '#'.
+## - Lines starting with '##' are comments and should not be uncommented.
+## - Do not change spacing or indentation unless you know what you are doing.
+##
+## This template is provided as a starting point and must be adapted
+## to your environment (endpoints, tokens, sizing).
+#####
+
+sources:
+  windows-eventlog-source:
+    type: wineventlog
+    sink: windows-eventlog-sink
+    channels:
+      - name: Application
+        onlyEventIDs: [1,10,1102,15,3,4625,4648,4672,4697,4698,4699,4702,4719,4720,4726,4728,4732,4768,4776,4904,4905,5136,5145,5156,5157,7,7036,7036,7045,7045,8]
+      - name: Security
+        onlyEventIDs: [1,10,1102,15,3,4625,4648,4672,4697,4698,4699,4702,4719,4720,4726,4728,4732,4768,4776,4904,4905,5136,5145,5156,5157,7,7036,7036,7045,7045,8]
+      - name: System
+        onlyEventIDs: [1,10,1102,15,3,4625,4648,4672,4697,4698,4699,4702,4719,4720,4726,4728,4732,4768,4776,4904,4905,5136,5145,5156,5157,7,7036,7036,7045,7045,8]
+      - name: ForwardedEvents
+        onlyEventIDs: [1,10,1102,15,3,4625,4648,4672,4697,4698,4699,4702,4719,4720,4726,4728,4732,4768,4776,4904,4905,5136,5145,5156,5157,7,7036,7036,7045,7045,8]
+    includeXML: false
+    language: 1033 #This setting forces the FLC agent to render the text as en-US. Other codes can be found in Microsoft documentation.
+    transforms:
+      - type: static_fields
+        fields:
+          - organization.name: name of the organization here in the format: client-company-name (i.e company-name or john-doe-and-sons)
+
+sinks:
+  #destination sinks out of flc
+  windows-eventlog-sink:
+    type: hec
+    token: "REPLACE_WITH_SINK_API_TOKEN"
+    url: "REPLACE_WITH_SINK_ENDPOINT_URL"
+    workers: 4
+    compression: gzip
+    compressionLevel: 9
+    maxEventSize: 910000
+    maxBatchSize: 12000000
