@@ -1,0 +1,42 @@
+sources:
+  var_log:
+    type: file
+    include:
+      - /var/log/*
+    exclude:
+      - /var/log/*.gz
+      - /var/log/falcon*
+      - /var/log/wtmp
+    sink: var-log-to-ngsiem
+    transforms:
+      - type: static_fields
+        fields:
+          organization.name: mawdsley-brooks-&-company
+  var_log_auditd:
+    type: file
+    include:
+      - /var/log/audit/*.log
+    sink: auditd-to-ngsiem
+    transforms:
+      - type: static_fields
+        fields:
+          organization.name: mawdsley-brooks-&-company
+sinks:
+  var-log-to-ngsiem:
+    type: hec
+    token: acc050da1a054362a56deeabd91f9e43
+    url: https://d739200e9aa1443e98361c6ae74a686b.ingest.eu-1.crowdstrike.com/services/collector
+    workers: 4
+    compression: gzip
+    compressionLevel: 9
+    maxEventSize: 910000
+    maxBatchSize: 12000000
+  auditd-to-ngsiem:
+    type: hec
+    token: db804c52-6909-4c4b-8768-71b4d7f64a1d
+    url: https://c37a92ab6734434db7a31107fb963572.ingest.eu-1.crowdstrike.com/services/collector
+    workers: 4
+    compression: gzip
+    compressionLevel: 9
+    maxEventSize: 910000
+    maxBatchSize: 12000000
