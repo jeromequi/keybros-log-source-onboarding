@@ -1,0 +1,9 @@
+module(load="imudp")
+input(type="imudp" port="1514")
+
+template(name="fortigate" type="string" string="/logs/fortigate-logs/%fromhost-ip%.log")
+
+if $msg contains "devname=" and $msg contains "devid=\"FG" then {
+    action(type="omfile" dynaFile="fortigate")
+    stop
+}
