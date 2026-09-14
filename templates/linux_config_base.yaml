@@ -11,7 +11,7 @@ sources:
     transforms:
       - type: static_fields
         fields:
-          organization.name: mawdsley-brooks-&-company
+          organization.name: name of the organization here in the format: client-company-name (i.e company-name or john-doe-and-sons)
   var_log_auditd:
     type: file
     include:
@@ -20,12 +20,12 @@ sources:
     transforms:
       - type: static_fields
         fields:
-          organization.name: mawdsley-brooks-&-company
+          organization.name: name of the organization here in the format: client-company-name (i.e company-name or john-doe-and-sons)
 sinks:
   var-log-to-ngsiem:
     type: hec
-    token: acc050da1a054362a56deeabd91f9e43
-    url: https://d739200e9aa1443e98361c6ae74a686b.ingest.eu-1.crowdstrike.com/services/collector
+    token: "REPLACE_WITH_SINK_API_TOKEN"
+    url: REPLACE_WITH_SINK_ENDPOINT_URL"
     workers: 4
     compression: gzip
     compressionLevel: 9
@@ -33,8 +33,8 @@ sinks:
     maxBatchSize: 12000000
   auditd-to-ngsiem:
     type: hec
-    token: db804c52-6909-4c4b-8768-71b4d7f64a1d
-    url: https://c37a92ab6734434db7a31107fb963572.ingest.eu-1.crowdstrike.com/services/collector
+    token: "REPLACE_WITH_SINK_API_TOKEN"
+    url: REPLACE_WITH_SINK_ENDPOINT_URL"
     workers: 4
     compression: gzip
     compressionLevel: 9
